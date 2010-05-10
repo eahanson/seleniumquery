@@ -65,6 +65,10 @@ Use `find()` instead.
 Did you end your last method call with a `!`? Do you have exactly one `!`? Are you using `[]` to access
 Javascript attributes? 
 
+### What's the argument to the SeleniumQuery constructor?
+
+It expects an instance of webrat's `selenium` class. But all it needs is an object that responds to `get_eval`.
+
 ### Where are the tests?
 
 Um, I test drove this by writing some Selenium tests. I should include those here, but I haven't.
