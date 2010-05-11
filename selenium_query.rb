@@ -1,12 +1,14 @@
 class SeleniumQuery
+  BASE_COMMAND = "selenium.browserbot.getCurrentWindow().jQuery(selenium.browserbot.getCurrentWindow().document)"
+
   def initialize(selenium)
     @selenium = selenium
-    @command = "selenium.browserbot.getCurrentWindow().jQuery(selenium.browserbot.getCurrentWindow().document)"
+    @command = BASE_COMMAND
   end
 
   def method_missing(symbol, * args)
-    if symbol.to_s.end_with?("!")
-      append_to_command(symbol.to_s.gsub(/!/, ""), args)
+    if symbol.to_s.match /!$/
+      append_to_command(symbol.to_s.gsub(/!$/, ""), args)
       get_eval
     else
       append_to_command(symbol, args)
@@ -30,7 +32,10 @@ class SeleniumQuery
   protected
 
   def append_to_command(symbol, args)
-    arg_string = args.empty? ? "" : args.map { |a| %("#{a}") }.join(', ')
+    arg_string = args.empty? ? "" : args.map do |a|
+      quote = a.match(/"/) ? %(') : %(")
+      %(#{quote}#{a}#{quote})
+    end.join(', ')
     @command += ".#{symbol}(#{arg_string})"
   end
 end
